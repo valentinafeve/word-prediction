@@ -88,12 +88,12 @@ with open('nn.json', "w") as json_file:
 nn.save_weights('nn.h5')
 
 # Predict function
-def predict(sentence):
-    sentence = sentence.lower()
-    words_in_sentence = [elem if elem else None for elem in sentence.split()]
+def predict(sentence_for_prediction):
+    cleaned_sentence = sentence_for_prediction.lower()
+    words_in_sentence = [elem if elem else None for elem in cleaned_sentence.split()]
     if len(words_in_sentence) < n_gram:
-        sentence = 'y ' + sentence
-    words_in_sentence = [elem if elem else None for elem in sentence.split()]
+        cleaned_sentence = 'y ' + cleaned_sentence
+    words_in_sentence = [elem if elem else None for elem in cleaned_sentence.split()]
     last_words = words_in_sentence[-n_gram:]
     last_words_vector_list = []
     for word in last_words:
