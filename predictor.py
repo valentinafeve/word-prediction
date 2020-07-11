@@ -4,18 +4,29 @@ import gensim
 import sys
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
+from collections import Counter
 
 n_gram = 2  # Number of considered words for the prediction
 dimensions = 100  # Number of dimensions for the word vector model
 epochs = 100  # Number of epochs for the neural network
 
+f = open("file", "r+")
+sentences = f.readlines()   # Sentences for training the prediction and creating the word vector model
+
+words = []
+model = None
 #   Creating the word vector model (just once)
+for sentence in sentences:
+        for word in sentence:
+            words.append(word)
+        vocabulary = [[key for key, value in Counter(words).most_common()]]
+        model = gensim.models.Word2Vec(min_count=1, workers=5, iter=10)
+        model.build_vocab(vocabulary)
+        model.train(sentences, total_examples=len(sentences), epochs=model.iter)
+        model.save('trained_model')
 
 #   Loading the trained model
 model = gensim.models.Word2Vec.load("trained_model")
-
-f = open("file", "r+")
-sentences = f.readlines()   # Sentences for training the prediction and creating the word vector model
 
 csv_data = {
     'current': [],
